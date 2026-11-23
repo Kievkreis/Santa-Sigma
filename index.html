@@ -738,7 +738,7 @@ header{z-index:9;background:rgba(4,12,32,.42);-webkit-backdrop-filter:blur(16px)
 .fig .sglow,.sring{left:73.300%;top:20.400%}
 .mkv{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;pointer-events:none}
 .mkvsrc{position:absolute;left:0;top:0;width:2px;height:2px;opacity:0;pointer-events:none}
-.nimg.fig.live .mkv{opacity:1}.nimg.fig.live img{opacity:0}
+.nimg.fig.mkon .mkv{opacity:1}.nimg.fig.mkon img{opacity:0}
 .tile.nick.magic .nimg.fig .mkv{animation:fglow 1.600s ease-out both}
 </style>
 </head>
@@ -1090,16 +1090,16 @@ var li=0;function cycle(){if(performance.now()-lastSay>6500||li===0){say(LINES[l
   function go(n){if(!made||!V[n]||n===cur)return;var v=V[n];try{v.currentTime=0;}catch(_){}var p=v.play();if(p&&p.catch)p.catch(function(){});if(cur&&cur!==n){if(prev&&prev!==n&&prev!==cur)V[prev].pause();prev=cur;fadeT=0;}cur=n;}
   function frame(t){if(!on)return;raf=requestAnimationFrame(frame);if(cur!==want)go(want);var c=V[cur];if(!c)return;
     if(prev){var okB=up(1,c),okA=up(0,V[prev]);if(!okA){prev=null;}else{if(okB&&!fadeT)fadeT=t;var k=fadeT?Math.min(1,(t-fadeT)/FADE):0;gl.uniform1f(um,k*k*(3-2*k));gl.drawArrays(gl.TRIANGLE_STRIP,0,4);if(k>=1){V[prev].pause();prev=null;}return;}}
-    if(up(0,c)){gl.uniform1f(um,0);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);if(!live&&c.currentTime>0){live=true;fig.classList.add("live");}}}
+    if(up(0,c)){gl.uniform1f(um,0);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);if(!live&&c.currentTime>0){live=true;fig.classList.add("mkon");}}}
   function sync(){var s=stat.textContent||"";want=s.indexOf("Говорить")>=0?"talk":s.indexOf("Слухає")>=0?"listen":s.indexOf("Вітається")>=0?"greet":"idle";}
   try{new MutationObserver(sync).observe(stat,{childList:true,characterData:true,subtree:true});}catch(_){}
   function kick(){if(on&&cur&&V[cur]&&V[cur].paused){var p=V[cur].play();if(p&&p.catch)p.catch(function(){});}}
   document.addEventListener("pointerdown",kick,true);document.addEventListener("visibilitychange",function(){if(!document.hidden)kick();});
-  cv.addEventListener("webglcontextlost",function(e){e.preventDefault();on=false;fig.classList.remove("live");},false);
+  cv.addEventListener("webglcontextlost",function(e){e.preventDefault();on=false;fig.classList.remove("mkon");},false);
   window.mkOn=function(s){
     if(s==="shake"||s==="call")make();
     if(s==="call"){if(!on){on=true;sync();raf=requestAnimationFrame(frame);}}
-    else if(on||cur){on=false;cancelAnimationFrame(raf);for(var n in V){try{V[n].pause();}catch(_){}}cur=null;prev=null;fadeT=0;live=false;fig.classList.remove("live");}
+    else if(on||cur){on=false;cancelAnimationFrame(raf);for(var n in V){try{V[n].pause();}catch(_){}}cur=null;prev=null;fadeT=0;live=false;fig.classList.remove("mkon");}
   };
 })();
 </script>
