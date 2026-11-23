@@ -733,6 +733,13 @@ header{z-index:9;background:rgba(4,12,32,.42);-webkit-backdrop-filter:blur(16px)
   .pgrp{margin-bottom:12px}.chips{gap:6px}.chips li{font-size:14px;padding:6px 10px}
   .psig{padding-right:84px}
 }
+.nimg.fig{bottom:0!important}
+.fig .blush.l{left:42.500%}.fig .blush.r{left:55.300%}.fig .blush{top:27.600%}
+.fig .sglow,.sring{left:73.300%;top:20.400%}
+.mkv{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;pointer-events:none}
+.mkvsrc{position:absolute;left:0;top:0;width:2px;height:2px;opacity:0;pointer-events:none}
+.nimg.fig.live .mkv{opacity:1}.nimg.fig.live img{opacity:0}
+.tile.nick.magic .nimg.fig .mkv{animation:fglow 1.600s ease-out both}
 </style>
 </head>
 <body>
@@ -772,7 +779,7 @@ header{z-index:9;background:rgba(4,12,32,.42);-webkit-backdrop-filter:blur(16px)
   <section class="callv nochat" id="callv" aria-hidden="true" aria-labelledby="ch">
     <div class="chead"><h2 id="ch">Розмова зі святим Миколаєм</h2><span class="rec mono"><i></i><span id="timer">00:00</span></span></div>
     <div class="room">
-      <div class="tile nick" id="nt"><div class="nbg" aria-hidden="true"></div><div class="nwash" aria-hidden="true"></div><div class="nimg fig" id="nimg"><img src="mk.webp" alt="Святий Миколай у червоній мантії та митрі, із золотим посохом, простягає руку"><i class="blush l"></i><i class="blush r"></i><i class="sglow"></i><i class="sring"></i><i class="sring b"></i><button class="hs" id="hsn" type="button" aria-label="Ніс Миколая" style="left:50.800%;top:29.600%"></button><button class="hs" id="hsl" type="button" aria-label="Ліва щока Миколая" style="left:44.400%;top:28.800%"></button><button class="hs" id="hsr" type="button" aria-label="Права щока Миколая" style="left:57.600%;top:28.500%"></button><button class="hs big" id="hss" type="button" aria-label="Посох Миколая" style="left:83%;top:22.100%"></button></div><span class="tl mono">Святий Миколай</span><span class="tr mono" id="nstat">З'єднуємо</span>
+      <div class="tile nick" id="nt"><div class="nbg" aria-hidden="true"></div><div class="nwash" aria-hidden="true"></div><div class="nimg fig" id="nimg"><img src="mk-call.webp" alt="Святий Миколай у червоній мантії та митрі, із золотим посохом, простягає руку"><i class="blush l"></i><i class="blush r"></i><i class="sglow"></i><i class="sring"></i><i class="sring b"></i><button class="hs" id="hsn" type="button" aria-label="Ніс Миколая" style="left:48.900%;top:28.200%"></button><button class="hs" id="hsl" type="button" aria-label="Ліва щока Миколая" style="left:42.500%;top:27.900%"></button><button class="hs" id="hsr" type="button" aria-label="Права щока Миколая" style="left:55.300%;top:27.300%"></button><button class="hs big" id="hss" type="button" aria-label="Посох Миколая" style="left:73.300%;top:20.400%"></button></div><span class="tl mono">Святий Миколай</span><span class="tr mono" id="nstat">З'єднуємо</span>
         <p class="subt" id="capt" aria-live="polite"></p>
         <div class="pip"><span class="ini" id="ini">С</span><span class="pl mono" id="yname">Ти</span><span class="vh" id="ycam">Камера вимкнена</span></div>
       </div>
@@ -911,7 +918,7 @@ var page=document.getElementById("page"),stage=document.querySelector(".stage"),
 var nameI=document.getElementById("name"),fN=document.getElementById("f-name"),age=document.getElementById("age");
 for(var y=3;y<=16;y++){var o=document.createElement("option");o.value=y;o.textContent=y+(y===16?" і старше":"");age.appendChild(o);}
 function later(f,ms){callT.push(setTimeout(f,ms));}
-function setState(s){state=s;if(s==="call"){[30,300,900,1600].forEach(function(ms){setTimeout(sizeFig,ms);});}page.scrollTop=0;if(s!=="shake"){pend=s==="call"?pend:null;}look=0;brow.t=0;page.className="page "+s+(gCur?" warm":"");document.getElementById("formv").setAttribute("aria-hidden",String(s!=="home"));document.getElementById("shakev").setAttribute("aria-hidden",String(s!=="shake"));document.getElementById("callv").setAttribute("aria-hidden",String(s!=="call"));
+function setState(s){state=s;if(window.mkOn)mkOn(s);if(s==="call"){[30,300,900,1600].forEach(function(ms){setTimeout(sizeFig,ms);});}page.scrollTop=0;if(s!=="shake"){pend=s==="call"?pend:null;}look=0;brow.t=0;page.className="page "+s+(gCur?" warm":"");document.getElementById("formv").setAttribute("aria-hidden",String(s!=="home"));document.getElementById("shakev").setAttribute("aria-hidden",String(s!=="shake"));document.getElementById("callv").setAttribute("aria-hidden",String(s!=="call"));
   if(s==="call")nt.insertBefore(stage,nt.firstChild);else if(stage.parentNode!==homeP)homeP.insertBefore(stage,homeNext);
   if(s!=="call"){callT.forEach(clearTimeout);callT=[];clearInterval(tick);speaking=false;capt.textContent="";msgs.textContent="";nt.classList.remove("talk");}
   setTimeout(size,30);}
@@ -923,7 +930,7 @@ function startCall(first,likes){setState("call");msgs.textContent="";document.ge
   function sayL(i){if(i>=lines.length){ns.textContent="Слухає";capt.textContent="";return;}var txt=lines[i];speaking=true;nt.classList.add("talk");ns.textContent="Говорить";capt.textContent=txt;addMsg("Святий Миколай","n",txt);
     later(function(){speaking=false;nt.classList.remove("talk");ns.textContent="Слухає";var bars=document.createElement("span");bars.className="bars";bars.innerHTML="<i></i><i></i><i></i><i></i>";var w=document.createElement("span");w.appendChild(bars);var lab=document.createElement("span");lab.textContent=" Слухаю тебе";w.appendChild(lab);w.style.display="inline-flex";w.style.gap="10px";w.style.alignItems="center";var m=addMsg(first,"u",w);
       later(function(){m.classList.add("done");lab.textContent=" Голосова відповідь";sayL(i+1);},2400);},900+txt.length*60);}
-  ns.textContent="З'єднуємо";later(function(){sayL(0);},1200);document.getElementById("leave").focus({preventScroll:true});}
+  ns.textContent=window.mkOn&&!reduce?"Вітається":"З'єднуємо";later(function(){sayL(0);},window.mkOn&&!reduce?4600:1200);document.getElementById("leave").focus({preventScroll:true});}
 document.getElementById("chatb").addEventListener("click",function(){var b=this,on=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",String(on));document.getElementById("callv").classList.toggle("nochat",!on);setTimeout(size,450);});
 function gifts(x,y){if(reduce)return;var C=["#e60012","#ffffff","#1f6b4a","#e60012","#ffd98a"];for(var i=0;i<7;i++){(function(i){var g=document.createElement("i");g.className="gift";g.style.left=x+"px";g.style.top=y+"px";g.style.setProperty("--c",C[i%C.length]);document.body.appendChild(g);var dx=(Math.random()-.5)*360,up=120+Math.random()*150,r=(Math.random()-.5)*540,sc=.8+Math.random()*.7;
   var an=g.animate([{transform:"translate(0,0) scale(.2) rotate(0deg)",opacity:1,easing:"cubic-bezier(.2,.8,.4,1)"},{transform:"translate("+dx*.55+"px,"+(-up)+"px) scale("+sc+") rotate("+r*.5+"deg)",opacity:1,offset:.42,easing:"cubic-bezier(.5,0,.9,.6)"},{transform:"translate("+dx+"px,"+(180+Math.random()*160)+"px) scale("+sc+") rotate("+r+"deg)",opacity:0}],{duration:1300+Math.random()*500,delay:i*45,fill:"both"});an.onfinish=function(){g.remove();};})(i);}}
@@ -972,7 +979,7 @@ gEl.addEventListener("pointerdown",function(e){e.preventDefault();gD={x:e.client
 gEl.addEventListener("pointermove",function(e){if(!gD)return;var S=gEl.clientWidth,lim=S*.16,dx=e.clientX-gD.x,dy=e.clientY-gD.y,L=Math.hypot(dx,dy),k=L>0?(lim*(1-Math.exp(-L/lim)))/L:0;gp.tx=dx*k;gp.ty=dy*k*.6;var sp=Math.hypot(e.clientX-gD.lx,e.clientY-gD.ly)/S;energy=Math.min(1,energy+sp*1.5);gD.lx=e.clientX;gD.ly=e.clientY;});
 function gUp(){if(gD){gD=null;gp.tx=0;gp.ty=0;}}gEl.addEventListener("pointerup",gUp);gEl.addEventListener("pointercancel",gUp);
 gEl.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();gp.vx+=(Math.random()<.5?-1:1)*900;energy=1;if(state==="shake")setMagic(magic+.2);}});
-document.getElementById("skip").addEventListener("click",enter);document.getElementById("ccb").addEventListener("click",function(){var on=this.getAttribute("aria-pressed")!=="true";this.setAttribute("aria-pressed",String(on));this.lastElementChild.textContent="Субтитри "+(on?"увімк.":"вимк.");document.getElementById("callv").classList.toggle("cc",on);});document.getElementById("hss").addEventListener("click",function(){var r=this.getBoundingClientRect(),g=document.querySelector(".sglow");g.classList.add("on");var fg=document.getElementById("nimg"),fr=fg.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;burst(cx,cy,44);[0,1,2,3,4,5].forEach(function(k){setTimeout(function(){burst(fr.left+fr.width*(.80-k*.012),fr.top+fr.height*(.30+k*.11),10);},90+k*90);});[0,1,2,3,4,5,6,7].forEach(function(k){setTimeout(function(){var a=k/8*6.283;burst(cx+Math.cos(a)*r.width*.9,cy+Math.sin(a)*r.width*.9,7);},260+k*55);});nt.classList.remove("magic");void nt.offsetWidth;nt.classList.add("magic");setTimeout(function(){g.classList.remove("on");},1500);setTimeout(function(){nt.classList.remove("magic");},1700);});["hsn","hsl","hsr","hss"].forEach(function(id){document.getElementById(id).addEventListener("click",function(){this.blur();});});var nimg=document.getElementById("nimg");document.getElementById("hsn").addEventListener("click",function(e){var r=this.getBoundingClientRect();gifts(r.left+r.width/2,r.top+r.height/2);nimg.classList.remove("boop");void nimg.offsetWidth;nimg.classList.add("boop");});[["hsl","l"],["hsr","r"]].forEach(function(p){document.getElementById(p[0]).addEventListener("click",function(){var r=this.getBoundingClientRect(),b=document.querySelector(".blush."+p[1]);b.classList.add("on");burst(r.left+r.width/2,r.top+r.height/2,12);setTimeout(function(){b.classList.remove("on");},900);});});
+document.getElementById("skip").addEventListener("click",enter);document.getElementById("ccb").addEventListener("click",function(){var on=this.getAttribute("aria-pressed")!=="true";this.setAttribute("aria-pressed",String(on));this.lastElementChild.textContent="Субтитри "+(on?"увімк.":"вимк.");document.getElementById("callv").classList.toggle("cc",on);});document.getElementById("hss").addEventListener("click",function(){var r=this.getBoundingClientRect(),g=document.querySelector(".sglow");g.classList.add("on");var fg=document.getElementById("nimg"),fr=fg.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;burst(cx,cy,44);[0,1,2,3,4,5].forEach(function(k){setTimeout(function(){burst(fr.left+fr.width*(.708-k*.004),fr.top+fr.height*(.30+k*.11),10);},90+k*90);});[0,1,2,3,4,5,6,7].forEach(function(k){setTimeout(function(){var a=k/8*6.283;burst(cx+Math.cos(a)*r.width*.9,cy+Math.sin(a)*r.width*.9,7);},260+k*55);});nt.classList.remove("magic");void nt.offsetWidth;nt.classList.add("magic");setTimeout(function(){g.classList.remove("on");},1500);setTimeout(function(){nt.classList.remove("magic");},1700);});["hsn","hsl","hsr","hss"].forEach(function(id){document.getElementById(id).addEventListener("click",function(){this.blur();});});var nimg=document.getElementById("nimg");document.getElementById("hsn").addEventListener("click",function(e){var r=this.getBoundingClientRect();gifts(r.left+r.width/2,r.top+r.height/2);nimg.classList.remove("boop");void nimg.offsetWidth;nimg.classList.add("boop");});[["hsl","l"],["hsr","r"]].forEach(function(p){document.getElementById(p[0]).addEventListener("click",function(){var r=this.getBoundingClientRect(),b=document.querySelector(".blush."+p[1]);b.classList.add("on");burst(r.left+r.width/2,r.top+r.height/2,12);setTimeout(function(){b.classList.remove("on");},900);});});
 function askMotion(){var mb=document.getElementById("motb"),tch=matchMedia("(pointer:coarse)").matches;try{if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==="function"){DeviceMotionEvent.requestPermission().then(function(r){mb.hidden=(r==="granted")||!tch;}).catch(function(){mb.hidden=!tch;});}}catch(_){}}
 document.getElementById("motb").addEventListener("click",askMotion);
 var lastA=null,lastVib=0;window.addEventListener("devicemotion",function(e){var l=e.acceleration,a=e.accelerationIncludingGravity,dx=0,dy=0,m=0;
@@ -1024,7 +1031,7 @@ var GLB=[{src:"g5.webp",cx:.4997,cy:.357,r:.362,fa:.70,fb:.84,glow:"150,185,255"
 function setGlobe(i){gCur=i;var g=GLB[i];gImg.src=g.src;GC.cx=g.cx;GC.cy=g.cy;GC.r=g.r;SG.fa=g.fa;SG.fb=g.fb;SNP.forEach(function(p){p.fl=g.fa+Math.random()*(g.fb-g.fa);if(p.rest||p.y>p.fl)p.y=p.fl;});gEl.style.setProperty("--glow",g.glow);page.classList.toggle("warm",i===1);gsw.setAttribute("aria-checked",String(i===1));document.getElementById("gswl").textContent="Куля "+(i+1);skick(.5,-.4);}
 gsw.addEventListener("click",function(){setGlobe(gCur?0:1);var r=gsw.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,10);});
 (function(){var im=new Image();im.src="g6.webp";})();gEl.style.setProperty("--glow",GLB[0].glow);
-function sizeFig(){var el=document.getElementById("nimg"),th=nt.clientHeight;if(!th)return;var k=matchMedia("(max-aspect-ratio:1/1)").matches?1.04:1.10,hh=Math.round(th*k);el.style.height=hh+"px";el.style.width=Math.round(hh*2/3)+"px";}
+function sizeFig(){var el=document.getElementById("nimg"),th=nt.clientHeight,tw=nt.clientWidth;if(!th)return;var hh=Math.round(Math.min(th*.95,tw*1.06*4/3));el.style.height=hh+"px";el.style.width=Math.round(hh*3/4)+"px";}
 window.addEventListener("resize",sizeFig);if(window.ResizeObserver){try{new ResizeObserver(sizeFig).observe(nt);}catch(_){}}
 /* tooltip: wave the hand, nudge the globe, then rest */
 if(!reduce)setInterval(function(){if(state!=="shake"||gD||magic>.05||entering)return;var hd=document.querySelector("#tipc .hand");hd.classList.remove("wave");void hd.offsetWidth;hd.classList.add("wave");setTimeout(function(){if(state==="shake"&&!gD&&magic<=.05){gp.vx+=260;setTimeout(function(){gp.vx-=320;},170);}},1000);},4800);
@@ -1057,6 +1064,43 @@ function frame(now){var dt=Math.min(.05,(now-last)/1000||.016);last=now;T+=dt;
   fc.globalAlpha=1;requestAnimationFrame(frame);}
 window.addEventListener("resize",size);size();requestAnimationFrame(frame);
 var li=0;function cycle(){if(performance.now()-lastSay>6500||li===0){say(LINES[li%LINES.length],true);li++;}}setTimeout(cycle,700);setInterval(cycle,1000);
+})();
+/* Mykolai call clips: H.264 with colour on the left half and the alpha matte on the right, composited in WebGL (works in Safari, Chrome, Firefox). */
+(function(){
+  var fig=document.getElementById("nimg"),tile=document.getElementById("nt"),stat=document.getElementById("nstat");
+  window.mkOn=function(){};
+  if(!fig||!stat||(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches))return;
+  var cv=document.createElement("canvas");cv.width=800;cv.height=1066;cv.className="mkv";cv.setAttribute("aria-hidden","true");
+  var gl=null;try{gl=cv.getContext("webgl",{alpha:true,premultipliedAlpha:true,antialias:false});}catch(_){}
+  if(!gl)return;
+  fig.insertBefore(cv,fig.querySelector("img").nextSibling);
+  function sh(t,src){var s=gl.createShader(t);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+  var pr=gl.createProgram();
+  gl.attachShader(pr,sh(gl.VERTEX_SHADER,"attribute vec2 p;varying vec2 u;void main(){u=p*.5+.5;gl_Position=vec4(p,0.,1.);}"));
+  gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,"precision mediump float;varying vec2 u;uniform sampler2D A;uniform sampler2D B;uniform float m;vec4 s(sampler2D t){float x=clamp(u.x,.002,.998)*.5;float a=texture2D(t,vec2(x+.5,u.y)).r;a=smoothstep(.02,.98,a);return vec4(texture2D(t,vec2(x,u.y)).rgb*step(.001,a),a);}void main(){vec4 a=s(A);gl_FragColor=m>0.?mix(a,s(B),m):a;}"));
+  gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return;gl.useProgram(pr);
+  var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+  var loc=gl.getAttribLocation(pr,"p");gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
+  function tex(unit){var t=gl.createTexture();gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,t);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);return t;}
+  tex(0);tex(1);gl.uniform1i(gl.getUniformLocation(pr,"A"),0);gl.uniform1i(gl.getUniformLocation(pr,"B"),1);
+  var um=gl.getUniformLocation(pr,"m"),V={},made=false,on=false,raf=0,cur=null,prev=null,fadeT=0,FADE=380,want="idle",live=false;
+  function make(){if(made)return;made=true;["idle","listen","talk","greet"].forEach(function(n){var v=document.createElement("video");v.muted=true;v.defaultMuted=true;v.setAttribute("muted","");v.setAttribute("playsinline","");v.playsInline=true;v.loop=n!=="greet";v.preload="auto";v.className="mkvsrc";v.setAttribute("aria-hidden","true");v.tabIndex=-1;v.src="mk-"+n+".mp4";fig.appendChild(v);V[n]=v;try{v.load();}catch(_){}});}
+  function up(unit,v){if(!v||v.readyState<2)return false;gl.activeTexture(gl.TEXTURE0+unit);try{gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,v);}catch(_){return false;}return true;}
+  function go(n){if(!made||!V[n]||n===cur)return;var v=V[n];try{v.currentTime=0;}catch(_){}var p=v.play();if(p&&p.catch)p.catch(function(){});if(cur&&cur!==n){if(prev&&prev!==n&&prev!==cur)V[prev].pause();prev=cur;fadeT=0;}cur=n;}
+  function frame(t){if(!on)return;raf=requestAnimationFrame(frame);if(cur!==want)go(want);var c=V[cur];if(!c)return;
+    if(prev){var okB=up(1,c),okA=up(0,V[prev]);if(!okA){prev=null;}else{if(okB&&!fadeT)fadeT=t;var k=fadeT?Math.min(1,(t-fadeT)/FADE):0;gl.uniform1f(um,k*k*(3-2*k));gl.drawArrays(gl.TRIANGLE_STRIP,0,4);if(k>=1){V[prev].pause();prev=null;}return;}}
+    if(up(0,c)){gl.uniform1f(um,0);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);if(!live&&c.currentTime>0){live=true;fig.classList.add("live");}}}
+  function sync(){var s=stat.textContent||"";want=s.indexOf("Говорить")>=0?"talk":s.indexOf("Слухає")>=0?"listen":s.indexOf("Вітається")>=0?"greet":"idle";}
+  try{new MutationObserver(sync).observe(stat,{childList:true,characterData:true,subtree:true});}catch(_){}
+  function kick(){if(on&&cur&&V[cur]&&V[cur].paused){var p=V[cur].play();if(p&&p.catch)p.catch(function(){});}}
+  document.addEventListener("pointerdown",kick,true);document.addEventListener("visibilitychange",function(){if(!document.hidden)kick();});
+  cv.addEventListener("webglcontextlost",function(e){e.preventDefault();on=false;fig.classList.remove("live");},false);
+  window.mkOn=function(s){
+    if(s==="shake"||s==="call")make();
+    if(s==="call"){if(!on){on=true;sync();raf=requestAnimationFrame(frame);}}
+    else if(on||cur){on=false;cancelAnimationFrame(raf);for(var n in V){try{V[n].pause();}catch(_){}}cur=null;prev=null;fadeT=0;live=false;fig.classList.remove("live");}
+  };
 })();
 </script>
 </body>
